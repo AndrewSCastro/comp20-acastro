@@ -10,11 +10,54 @@
 
 <h1 id="title">Rick Roll</h1>
 
-<video src="https://www.cs.tufts.edu/comp/20/rickroll.mp4" id="rickroll" controls></video>
-<div id="lyrics"></div>
+<video src="https://www.cs.tufts.edu/comp/20/rickroll.mp4" id="rickroll" controls>
+</video>
+
+<div id="lyrics">
+</div>
 
 <script>
 	// Complete this section and create a CSS file named style.css
+    //var video = document.getElementById("rickroll");
+    var vidlistener = document.getElementById("rickroll");
+
+    document.addEventListener("timeupdate", function() {
+	    //document.getElementById("video").innerHTML = vid.currentTime;
+	    if (vidlistener.currentTime >= 18.5 && vidlistener.currentTime < 22.2)
+	    	document.getElementById("lyrics").innerHTML = "We're no strangers to love";
+	     
+	    else if (vidlistener.currentTime >= 22.2 && vidlistener.currentTime < 26.5)
+	    	document.getElementById("lyrics").innerHTML = "You know the rules and so do I";
+
+	    else if (vidlistener.currentTime >= 26.5 && vidlistener.currentTime < 31)
+	    	document.getElementById("lyrics").innerHTML = "A full commitment's what I'm thinking of";
+
+	    else if (vidlistener.currentTime >= 31 && vidlistener.currentTime < 34.5)
+	        document.getElementById("lyrics").innerHTML = "You wouldn't get this from any other guy";
+
+	    else if (vidlistener.currentTime >= 34.5 && vidlistener.currentTime < 40)
+	        document.getElementById("lyrics").innerHTML = "I just wanna tell you how I'm feeling";
+
+	    else if (vidlistener.currentTime >= 40 && vidlistener.currentTime < 42.5)
+	        document.getElementById("lyrics").innerHTML = "Gotta make you understand";
+
+	    else if (vidlistener.currentTime >= 42.5 && vidlistener.currentTime < 45)
+	    	document.getElementById("lyrics").innerHTML = "Never gonna give you up";
+
+	    else if (vidlistener.currentTime >= 45 && vidlistener.currentTime < 46.5)
+	        document.getElementById("lyrics").innerHTML = "Never gonna let you down";
+
+
+
+
+
+
+
+
+
+     },  true);
+
+
 </script>
 </body>
 </html>	
