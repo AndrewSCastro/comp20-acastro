@@ -44,8 +44,52 @@
 	    else if (vidlistener.currentTime >= 42.5 && vidlistener.currentTime < 45)
 	    	document.getElementById("lyrics").innerHTML = "Never gonna give you up";
 
-	    else if (vidlistener.currentTime >= 45 && vidlistener.currentTime < 46.5)
+	    else if (vidlistener.currentTime >= 45 && vidlistener.currentTime < 47.3)
 	        document.getElementById("lyrics").innerHTML = "Never gonna let you down";
+
+	    else if (vidlistener.currentTime >= 47.3 && vidlistener.currentTime < 51)
+	    	document.getElementById("lyrics").innerHTML = "Never gonna run around and desert you";
+
+	    else if (vidlistener.currentTime >= 51 && vidlistener.currentTime < 53)
+	        document.getElementById("lyrics").innerHTML = "Never gonna make you cry";
+
+	    else if (vidlistener.currentTime >= 53 && vidlistener.currentTime < 56)
+	        document.getElementById("lyrics").innerHTML = "Never gonna say goodbye";
+
+	    else if (vidlistener.currentTime >= 56 && vidlistener.currentTime < 60)
+            document.getElementById("lyrics").innerHTML = "Never gonna tell a lie and hurt you";
+
+        else if (vidlistener.currentTime >= 60 && vidlistener.currentTime < 77)
+        	document.getElementById("lyrics").innerHTML = "We've known each other for so long | Your heart's been aching, but | You're too shy to say it | Inside, we both know what's been going on | We know the game and we're gonna play it";
+
+        else if (vidlistener.currentTime >= 77 && vidlistener.currentTime < 85)
+        	document.getElementById("lyrics").innerHTML = "And if you ask me how I'm feeling | Don't tell me you're too blind to see";
+
+        else if (vidlistener.currentTime >= 85 && vidlistener.currentTime < 120)
+        	document.getElementById("lyrics").innerHTML = "Never gonna give you up | Never gonna let you down | Never gonna run around and desert you | Never gonna make you cry | Never gonna say goodbye | Never gonna tell a lie and hurt you";
+
+        else if (vidlistener.currentTime >= 120 && vidlistener.currentTime < 135)
+        	document.getElementById("lyrics").innerHTML = "(Ooh, give you up) | (Ooh, give you up) | Never gonna give, never gonna give | (Give you up) | Never gonna give, never gonna give | (Give you up)";
+
+        else if (vidlistener.currentTime >= 135 && vidlistener.currentTime < 153)
+            document.getElementById("lyrics").innerHTML = "We've known each other for so long | Your heart's been aching, but | You're too shy to say it | Inside, we both know what's been going on | We know the game and we're gonna play it";
+
+        else if (vidlistener.currentTime >= 153 && vidlistener.currentTime < 161)
+        	document.getElementById("lyrics").innerHTML = "I just wanna tell you how I'm feeling | Gotta make you understand";
+
+        else if (vidlistener.currentTime >= 161 && vidlistener.currentTime < 212)
+        	document.getElementById("lyrics").innerHTML = "Never gonna give you up | Never gonna let you down | Never gonna run around and desert you | Never gonna make you cry | Never gonna say goodbye | Never gonna tell a lie and hurt you (x3)";
+
+
+
+
+
+
+
+
+
+
+
 
 
 
