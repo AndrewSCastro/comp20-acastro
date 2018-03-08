@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <title>Geolocation Map Example</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <link rel="stylesheet" href="index.css" />
+    <script>
+      var myLat = 0;
+      var myLng = 0;
+      var me = new google.maps.LatLng(myLat, myLng);
+      var myOptions = {
+      zoom: 13, // The larger the zoom number, the bigger the zoom
+      center: me,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+      };
+      var map;
+      var marker;
+      var infowindow = new google.maps.InfoWindow();
+      var request = new XMLHttpRequest();
+      function init() {
+      map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      getMyLocation();
+      get_other_locations();
+
+      }
+
+      function getMyLocation() {
+      if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+      navigator.geolocation.getCurrentPosition(function(position) {
+      myLat = position.coords.latitude;
+      myLng = position.coords.longitude;
+      renderMap();
+    });
+  }
+  else {
+    alert("Geolocation is not supported by your web browser.  What a shame!");
+  }
+}
+
+function get_other_locations(){
+  console.log("HERE");
+      request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+      request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        console.log("Got the data back!");
+        data = JSON.parse(request.responseText);
+        //console.log(data);
+        place_passengers(data);
+      }
+    }
+    request.send("username=PMd9oUCZoM&lat=" + myLat + "&lng=" + myLng);
+}
+
+function place_passengers(data){
+       console.log(data);
+       for (i = 0; i < data.passengers.length; i++){
+        //console.log(data.passengers[i].username);
+        
+       };
+       
+}
+
+function renderMap() {
+  me = new google.maps.LatLng(myLat, myLng);
+
+  // Update map and go there...
+  map.panTo(me);
+  
+  // Create a marker
+
+    var image = {
+      url : "https://vignette.wikia.nocookie.net/disney/images/5/59/Russell.png/revision/latest?cb=20130726041231", 
+      scaledSize: new google.maps.Size(100,100)
+    };
+
+    marker = new google.maps.Marker({
+    position: me,
+    title: "Andrew's Location: " + "Distance to nearest passenger is:",
+    icon: image
+  });
+  marker.setMap(map);
+    
+  // Open info window on click of marker
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.setContent(marker.title);
+    infowindow.open(map, marker);
+  });
+}
+    </script>
+  </head>
+  
+  <body onload="init()" >
+    <div id="map_canvas"></div>
+  </body>
+</html>
+
+<!--<!doctype html>
+
+<html>
+<head>
+<title>Where In The World?</title>
+<script>
+  var request = new XMLHttpRequest();
+  var request2 = new XMLHttpRequest();
+  navigator.geolocation.getCurrentPosition(gotLocation);
+  function gotLocation(position) {
+        var myLat = position.coords.latitude;
+        var myLng = position.coords.longitude;
+        outputElem = document.getElementById("location");
+        outputElem.innerHTML = "<h2>You are at " + myLat + ", " + myLng + "</h2>";
+
+        console.log("HERE");
+        request2.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+        console.log("Got the data back a second time!");
+        data = request2.responseText;
+        console.log(data.vehicles);
+  }
+
+
+
+  function getLocation() {
+    // Step 1: set up HTTP request. Three required arguments...:
+    // ...HTTP method (string), URL (string), asynch (boolean)
+    request.open("GET", "location.json", true);
+    // Step 2: Set up callback function to deal with HTTP response data
+    request.onreadystatechange = function() {
+      if (request.readyState == 4 && request.status == 200) {
+        console.log("Got the data back!");
+        data = request.responseText;
+        console.log(data);
+        loc = JSON.parse(data);
+        elem = document.getElementById("location");
+        elem.innerHTML = "<p>Carmen Sandiego was last seen at " + loc["description"] + "</p>";
+      }
+      else if (request.readyState == 4 && request.status != 200) {
+        // think 404 or 500
+        document.getElementById("location").innerHTML = "<p>Whoops, something went terribly wrongo</p>";
+      }
+      else {
+        console.log("In progress...");
+      }
+    };
+    // Step 3: trigger the HTTP request
+    // The argument for send() --data that you want to send to web server
+    request.send(null);
+  }
+</script>
+</head>
+
+<body onload="getLocation()">
+  <h1>Notuber</h1>
+  <h2> </h2>
+  <div id="location">Trying to determine location...</div>
+</body>
+</html>-->
