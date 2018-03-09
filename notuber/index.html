@@ -3,15 +3,30 @@
 <html>
 
   <head>
-    <title>Geolocation Map Example</title>
+    <title>Notuber</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
-    <script src="https://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>
+    <!--<script src="https://maps.google.com/maps/api/js?sensor=true&libraries=geometry"></script>-->
+
+    <script src= "https://maps.google.com/maps/api/js?key=AIzaSyCFiURaTLvrzCY_LHmh4nGD4BmaejDghps
+&libraries=geometry"> </script>
     <link rel="stylesheet" href="index.css" />
+
+
     <script>
       var myLat = 0;
       var myLng = 0;
       var nearestPassenger = 1000000000;
+      var nearestCar = 10000000000;
       var my_username = "PMd9oUCZoM";
+      var my_type;
+      var others_type;
+      //var my_icon;
+      var others_icon;
+      var image_type;
+      var image_other;
+      //var data;
+
+      //PMd9oUCZoM
     
       var me = new google.maps.LatLng(myLat, myLng);
       var myOptions = {
@@ -24,8 +39,11 @@
       var infowindow = new google.maps.InfoWindow();
       var request = new XMLHttpRequest();
 
+
       function init() {
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+      //getmy_type();
+         //renderMap();
       getMyLocation();
       }
 
@@ -35,9 +53,9 @@
       navigator.geolocation.getCurrentPosition(function(position) {
       myLat = position.coords.latitude;
       myLng = position.coords.longitude;
-      //renderMap();
       get_other_locations();
-        renderMap();
+      //get_other_locations();
+      //renderMap();
     });
   }
   else {
@@ -51,16 +69,81 @@ function get_other_locations(){
       request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
         data = JSON.parse(request.responseText);
-        place_passengers(data);
+        if(data.hasOwnProperty('passengers'))
+        {
+         console.log("1");
+         my_type = "vehicle";
+         others_type = "passengers";
+         image_type = "car";
+         image_other = "Ash.png";
+        }
+        if (data.hasOwnProperty('vehicles'))
+        {
+          console.log("2");
+          my_type = "passengers";
+          others_type = "vehicle";
+          image_type = "AshKetchum";
+          image_other = "car.png";
+        }
+        renderMap(my_type);
+        place_icons(data);
       }
     }
-    request.send("username=PMd9oUCZoM&lat=" + myLat + "&lng=" + myLng);
+    request.send("username=" + my_username + "&lat=" + myLat + "&lng=" + myLng);
 }
 
-function place_passengers(data){
-       //console.log(data);
-       for (i = 0; i < data.passengers.length; i++){
+function place_icons(data){
+       console.log(data);
+       //if(data)
+       console.log(my_type);
+       if (my_type == "passengers")
+       {
+ for (i = 0; i < data.vehicles.length; i++){
         //console.log(data.passengers[i].username);
+        console.log(data);
+      username = data.vehicles[i].username;
+      var car_Position = {lat: data.vehicles[i].lat, lng: data.vehicles[i].lng }
+      //lat = data.passengers[i].lat;
+      //long = data.passengers[i].lng;
+      var image = {
+      url : "car.png", 
+      //scaledSize: new google.maps.Size(50,100)
+    };
+
+  miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.vehicles[i].lat, data.vehicles[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
+//console.log(myLat, myLng);
+   if (nearestCar > miles)
+    nearestCar = miles;
+
+new google.maps.LatLng(myLat, myLng)
+//console.log(myLat, myLng);
+
+    passenger_marker = new google.maps.Marker({
+    position: car_Position,
+    title: username,
+    icon: image,
+    distance: miles
+  });
+
+
+
+    passenger_marker.setMap(map);
+    //passenger_marker.setIcon("mr_frederickson.gif");
+  google.maps.event.addListener(passenger_marker, 'click', function() {
+    infowindow.setContent(this.title +"'s distance to nearest car is " + this.distance + " miles");
+    infowindow.open(map, this);
+  });
+
+  infowindow.setContent(marker.title + nearestPassenger);
+
+       };
+    }
+
+       if (my_type == "vehicle")
+       {
+ for (i = 0; i < data.passengers.length; i++){
+        //console.log(data.passengers[i].username);
+        console.log(data);
       username = data.passengers[i].username;
       var passenger_Position = {lat: data.passengers[i].lat, lng: data.passengers[i].lng }
       //lat = data.passengers[i].lat;
@@ -98,22 +181,40 @@ new google.maps.LatLng(myLat, myLng)
 
        };
        
+
+       }
+
+      
 }
 
-function renderMap() {
+function renderMap(my_type) {
   me = new google.maps.LatLng(myLat, myLng);
   // Update map and go there...
   map.panTo(me);
 
-  // Create a marker
+  //Create a marker
+  console.log("image type is CURRENTLY " + my_type);
+  if (my_type == "vehicle")
+  {
+    console.log("HERE")
     var image = {
-      url : "car.png", 
-    };
+    url : "car.png"
+  }
+  }
+  console.log("image type now is " + my_type);
+  if (my_type == "passengers")
+  {
+    console.log("YOU'RE A PASSENGER")
+     var image = {
+    url : "Ash.png",
+    scaledSize: new google.maps.Size(50,100)
+  }
+  }
 
 //console.log("is" + nearestPassenger);
     marker = new google.maps.Marker({
     position: me,
-    title: my_username + "'s distance to nearest passenger is: ",
+    title: my_username + "'s distance to nearest " + others_type + " is: ",
     icon: image
   });
 
