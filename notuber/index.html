@@ -17,17 +17,13 @@
       var myLng = 0;
       var nearestPassenger = 1000000000;
       var nearestCar = 10000000000;
-      var my_username = "PMd9oUCZoM";
+      var my_username = "PMd9oUCZoM";//KiztarwO7h
       var my_type;
       var others_type;
-      //var my_icon;
       var others_icon;
       var image_type;
       var image_other;
-      //var data;
 
-      //PMd9oUCZoM
-    
       var me = new google.maps.LatLng(myLat, myLng);
       var myOptions = {
       zoom: 16, // The larger the zoom number, the bigger the zoom
@@ -39,185 +35,146 @@
       var infowindow = new google.maps.InfoWindow();
       var request = new XMLHttpRequest();
 
-
       function init() {
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-      //getmy_type();
-         //renderMap();
       getMyLocation();
       }
-
-
       function getMyLocation() {
-      if (navigator.geolocation) { // the navigator.geolocation object is supported on your browser
+      if (navigator.geolocation) { 
       navigator.geolocation.getCurrentPosition(function(position) {
       myLat = position.coords.latitude;
       myLng = position.coords.longitude;
       get_other_locations();
-      //get_other_locations();
-      //renderMap();
     });
   }
   else {
     alert("Geolocation is not supported by your web browser.  What a shame!");
   }
 }
-
 function get_other_locations(){
+
       request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
       request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
       request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
         data = JSON.parse(request.responseText);
+        
         if(data.hasOwnProperty('passengers'))
         {
-         console.log("1");
          my_type = "vehicle";
          others_type = "passengers";
          image_type = "car";
          image_other = "Ash.png";
         }
+        
         if (data.hasOwnProperty('vehicles'))
         {
-          console.log("2");
           my_type = "passengers";
           others_type = "vehicle";
           image_type = "AshKetchum";
           image_other = "car.png";
         }
         renderMap(my_type);
-        place_icons(data);
+        place_icons(data, my_type);
       }
     }
     request.send("username=" + my_username + "&lat=" + myLat + "&lng=" + myLng);
 }
 
-function place_icons(data){
-       console.log(data);
-       //if(data)
-       console.log(my_type);
+
+
+function place_icons(data, my_type){
+  // IF I AM A PASSENGER
        if (my_type == "passengers")
        {
- for (i = 0; i < data.vehicles.length; i++){
-        //console.log(data.passengers[i].username);
-        console.log(data);
+      for (i = 0; i < data.vehicles.length; i++){
       username = data.vehicles[i].username;
       var car_Position = {lat: data.vehicles[i].lat, lng: data.vehicles[i].lng }
-      //lat = data.passengers[i].lat;
-      //long = data.passengers[i].lng;
+     
       var image = {
       url : "car.png", 
-      //scaledSize: new google.maps.Size(50,100)
     };
 
-  miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.vehicles[i].lat, data.vehicles[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
-//console.log(myLat, myLng);
-   if (nearestCar > miles)
-    nearestCar = miles;
+    miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.vehicles[i].lat, data.vehicles[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
 
-new google.maps.LatLng(myLat, myLng)
-//console.log(myLat, myLng);
+     if (nearestCar > miles)
+    nearestCar = miles;
+    new google.maps.LatLng(myLat, myLng)
 
     passenger_marker = new google.maps.Marker({
     position: car_Position,
     title: username,
     icon: image,
     distance: miles
-  });
-
-
-
+     });
     passenger_marker.setMap(map);
-    //passenger_marker.setIcon("mr_frederickson.gif");
-  google.maps.event.addListener(passenger_marker, 'click', function() {
+    google.maps.event.addListener(passenger_marker, 'click', function() {
     infowindow.setContent(this.title +"'s distance to nearest car is " + this.distance + " miles");
     infowindow.open(map, this);
-  });
-
-  infowindow.setContent(marker.title + nearestPassenger);
-
+    });
+    infowindow.setContent(marker.title + nearestPassenger);
        };
     }
 
+      // IF I AM A DRIVER
        if (my_type == "vehicle")
        {
- for (i = 0; i < data.passengers.length; i++){
-        //console.log(data.passengers[i].username);
-        console.log(data);
+      for (i = 0; i < data.passengers.length; i++){
       username = data.passengers[i].username;
       var passenger_Position = {lat: data.passengers[i].lat, lng: data.passengers[i].lng }
-      //lat = data.passengers[i].lat;
-      //long = data.passengers[i].lng;
       var image = {
       url : "Ash.png", 
       scaledSize: new google.maps.Size(50,100)
     };
 
-  miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.passengers[i].lat, data.passengers[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
-//console.log(myLat, myLng);
-   if (nearestPassenger > miles)
+    miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.passengers[i].lat, data.passengers[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
+    if (nearestPassenger > miles)
     nearestPassenger = miles;
-
-new google.maps.LatLng(myLat, myLng)
-//console.log(myLat, myLng);
-
+    new google.maps.LatLng(myLat, myLng)
     passenger_marker = new google.maps.Marker({
     position: passenger_Position,
     title: username,
     icon: image,
     distance: miles
   });
-
-
-
     passenger_marker.setMap(map);
-    //passenger_marker.setIcon("mr_frederickson.gif");
-  google.maps.event.addListener(passenger_marker, 'click', function() {
-    infowindow.setContent(this.title +"'s distance to nearest car is " + this.distance + " miles");
+    
+    google.maps.event.addListener(passenger_marker, 'click', function() {
+    infowindow.setContent(this.title +"'s distance to nearest" + nearestPassenger + "is " + this.distance + " miles");
     infowindow.open(map, this);
-  });
-
-  infowindow.setContent(marker.title + nearestPassenger);
-
+   });
+    infowindow.setContent(marker.title + nearestPassenger);
        };
        
-
-       }
-
-      
+       }     
 }
+
+
 
 function renderMap(my_type) {
   me = new google.maps.LatLng(myLat, myLng);
   // Update map and go there...
   map.panTo(me);
-
   //Create a marker
-  console.log("image type is CURRENTLY " + my_type);
   if (my_type == "vehicle")
   {
-    console.log("HERE")
     var image = {
     url : "car.png"
   }
   }
-  console.log("image type now is " + my_type);
   if (my_type == "passengers")
   {
-    console.log("YOU'RE A PASSENGER")
      var image = {
     url : "Ash.png",
     scaledSize: new google.maps.Size(50,100)
   }
   }
-
-//console.log("is" + nearestPassenger);
     marker = new google.maps.Marker({
     position: me,
     title: my_username + "'s distance to nearest " + others_type + " is: ",
     icon: image
   });
-
   marker.setMap(map);
     
   // Open info window on click of marker
@@ -235,7 +192,6 @@ function renderMap(my_type) {
 </html>
 
 <!--<!doctype html>
-
 <html>
 <head>
 <title>Where In The World?</title>
@@ -248,16 +204,12 @@ function renderMap(my_type) {
         var myLng = position.coords.longitude;
         outputElem = document.getElementById("location");
         outputElem.innerHTML = "<h2>You are at " + myLat + ", " + myLng + "</h2>";
-
         console.log("HERE");
         request2.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
         console.log("Got the data back a second time!");
         data = request2.responseText;
         console.log(data.vehicles);
   }
-
-
-
   function getLocation() {
     // Step 1: set up HTTP request. Three required arguments...:
     // ...HTTP method (string), URL (string), asynch (boolean)
@@ -286,7 +238,6 @@ function renderMap(my_type) {
   }
 </script>
 </head>
-
 <body onload="getLocation()">
   <h1>Notuber</h1>
   <h2> </h2>
