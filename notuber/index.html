@@ -59,7 +59,7 @@ function get_other_locations(){
       request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
         data = JSON.parse(request.responseText);
-        
+        console.log(data);
         if(data.hasOwnProperty('passengers'))
         {
          my_type = "vehicle";
@@ -113,7 +113,7 @@ function place_icons(data, my_type){
     infowindow.setContent(this.title +"'s distance to nearest car is " + this.distance + " miles");
     infowindow.open(map, this);
     });
-    infowindow.setContent(marker.title + nearestPassenger);
+    //infowindow.setContent(marker.title + nearestPassenger);
        };
     }
 
@@ -141,10 +141,11 @@ function place_icons(data, my_type){
     passenger_marker.setMap(map);
     
     google.maps.event.addListener(passenger_marker, 'click', function() {
-    infowindow.setContent(this.title +"'s distance to nearest" + nearestPassenger + "is " + this.distance + " miles");
+      console.log(others_type);
+    infowindow.setContent(this.title +"'s distance to nearest " + my_type + " is " + this.distance + " miles");
     infowindow.open(map, this);
    });
-    infowindow.setContent(marker.title + nearestPassenger);
+    //infowindow.setContent(marker.title + nearestPassenger);
        };
        
        }     
