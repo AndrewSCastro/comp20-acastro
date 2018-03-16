@@ -21,19 +21,21 @@
                 //console.log('You pressed enter!');
                 if(typeof event != 'undefined'){
 
+                    var date = new Date().toUTCString();
+                    var timestamp = date;
+
+                    $('#msg').html("Msg");
                     
-                    var time = new Date().getTime();
-                    var date = new Date().getDate();
-                    var parsed_date = Date.toUTCString();
-                    //date = date.toUTCString();
-                    console.log(date);
-                    timestamp = date + time;
-                    localStorage.setItem(timestamp, msg);
+                    var message = $('#msg').val();
+                    console.log(message);
+                    message = timestamp + " - " + message;
+                    localStorage.setItem(timestamp, message);
                 }
 
             output = "";
             for (var i = 0; i < localStorage.length; i++) {
-            output = output + "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>\n";
+            //output = localStorage.getItem(localStorage.key(i));
+            output = "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>" + output;
         }
         log.innerHTML = output;
             }
