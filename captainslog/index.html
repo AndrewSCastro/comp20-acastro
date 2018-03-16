@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Captain's Log</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        // Your work will be done here...
+        //jequery document ready
+        // print output
+        // when a key is pressed
+        $(document).ready(function(){
+        //console.log("A");
+        //output = "";
+        $(document).keypress(function(key){
+            //$('#text').html("Text")
+            if(key.which == 13){
+                //console.log('You pressed enter!');
+                if(typeof event != 'undefined'){
+
+                    
+                    var time = new Date().getTime();
+                    var date = new Date().getDate();
+                    var parsed_date = Date.toUTCString();
+                    //date = date.toUTCString();
+                    console.log(date);
+                    timestamp = date + time;
+                    localStorage.setItem(timestamp, msg);
+                }
+
+            output = "";
+            for (var i = 0; i < localStorage.length; i++) {
+            output = output + "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>\n";
+        }
+        log.innerHTML = output;
+            }
+        });
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1>Captain's Log</h1>
+    <h3>New entry: <input type="text" id="msg" name="msg" size="30" /></h3>
+    <div id="log"></div>
+</body>
+</html>
