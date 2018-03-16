@@ -13,35 +13,34 @@
         // print output
         // when a key is pressed
         $(document).ready(function(){
-        //console.log("A");
-        //output = "";
+
         $(document).keypress(function(key){
-            //$('#text').html("Text")
+           
             if(key.which == 13){
-                //console.log('You pressed enter!');
+                
                 if(typeof event != 'undefined'){
 
                     var date = new Date().toUTCString();
                     var timestamp = date;
 
                     $('#msg').html("Msg");
-                    
                     var message = $('#msg').val();
-                    console.log(message);
+                    
                     message = timestamp + " - " + message;
                     localStorage.setItem(timestamp, message);
                 }
 
-            output = "";
-            for (var i = 0; i < localStorage.length; i++) {
-            //output = localStorage.getItem(localStorage.key(i));
-            output = "<p>" + localStorage.getItem(localStorage.key(i)) + "</p>" + output;
-        }
-        log.innerHTML = output;
-            }
+                output = "";
+                for (var i = 0; i < localStorage.length; i++) {
+                output = "<p>" + localStorage.getItem(localStorage.key(i)) + 
+                         "</p>" + output;
+                }
+
+                log.innerHTML = output;
+                }
+            });
         });
 
-        });
     </script>
 </head>
 
