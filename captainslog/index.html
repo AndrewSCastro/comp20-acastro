@@ -13,6 +13,19 @@
         // print output
         // when a key is pressed
         $(document).ready(function(){
+            if (localStorage.length == 0)
+                console.log('Nothing in localStorage');
+
+            if (localStorage.length != 0){
+
+                loaded = "";
+                for (var i = 0; i < localStorage.length; i++) {
+                loaded = "<p>" + localStorage.getItem(localStorage.key(i)) + 
+                         "</p>" + loaded;
+                }
+
+                log.innerHTML = loaded;
+            }
 
         $(document).keypress(function(key){
            
