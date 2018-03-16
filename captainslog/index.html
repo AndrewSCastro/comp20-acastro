@@ -25,11 +25,12 @@
 
                     $('#msg').html("Msg");
                     var message = $('#msg').val();
-                    
+
                     message = timestamp + " - " + message;
                     localStorage.setItem(timestamp, message);
                 }
 
+                // sets empty string to concatenate to
                 output = "";
                 for (var i = 0; i < localStorage.length; i++) {
                 output = "<p>" + localStorage.getItem(localStorage.key(i)) + 
