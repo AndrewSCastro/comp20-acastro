@@ -11,7 +11,6 @@
 &libraries=geometry"> </script>
    <link rel="stylesheet" href= "index.css"/>
 
-
     <script>
       var myLat = 0;
       var myLng = 0;
@@ -23,7 +22,6 @@
       var others_icon;
       var image_type;
       var image_other;
-
       var me = new google.maps.LatLng(myLat, myLng);
       var myOptions = {
       zoom: 16, // The larger the zoom number, the bigger the zoom
@@ -34,13 +32,11 @@
       var marker;
       var infowindow = new google.maps.InfoWindow();
       var request = new XMLHttpRequest();
-
       function init() {
       map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
       getMyLocation();
       }
       function getMyLocation() {
-
       // Retrieves location via JavaScript
       if (navigator.geolocation) { 
       navigator.geolocation.getCurrentPosition(function(position) {
@@ -54,11 +50,10 @@
   }
 }
 function get_other_locations(){
-
       // Requests information
-      request.open("POST", "https://jordan-marsh.herokuapp.com/rides", true);
+      request.open("POST", "https://blooming-fortress-52660.herokuapp.com/rides", true);
+      console.log(request);
       request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
       request.onreadystatechange = function() {
       if (request.readyState == 4 && request.status == 200) {
         data = JSON.parse(request.responseText);
@@ -83,9 +78,6 @@ function get_other_locations(){
     }
     request.send("username=" + my_username + "&lat=" + myLat + "&lng=" + myLng);
 }
-
-
-
 function place_icons(data, my_type){
   // IF I AM A PASSENGER
        if (my_type == "passengers")
@@ -97,14 +89,11 @@ function place_icons(data, my_type){
       var image = {
       url : "car.png", 
     };
-
     miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.vehicles[i].lat, data.vehicles[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
-
      if (nearestCar > miles){
        nearestCar = miles;
      }
     new google.maps.LatLng(myLat, myLng)
-
     passenger_marker = new google.maps.Marker({
     position: car_Position,
     title: username,
@@ -119,7 +108,6 @@ function place_icons(data, my_type){
     //infowindow.setContent(marker.title + nearestPassenger);
        };
     }
-
       // IF I AM A DRIVER
        if (my_type == "vehicle")
        {
@@ -130,7 +118,6 @@ function place_icons(data, my_type){
       url : "Ash.png", 
       scaledSize: new google.maps.Size(50,100)
     };
-
     miles = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(data.passengers[i].lat, data.passengers[i].lng), new google.maps.LatLng(myLat,myLng)) * 0.00062137;
     if (nearestPassenger > miles)
     nearestPassenger = miles;
@@ -151,9 +138,6 @@ function place_icons(data, my_type){
        
        }     
 }
-
-
-
 function renderMap(my_type) {
   me = new google.maps.LatLng(myLat, myLng);
   // Update map and go there...
@@ -185,7 +169,6 @@ function renderMap(my_type) {
     infowindow.setContent(marker.title + nearestPassenger + " miles");
     infowindow.open(map, marker);
   }
-
   if (my_type == "passengers"){
     infowindow.setContent(marker.title + nearestCar + " miles");
     infowindow.open(map, marker);
