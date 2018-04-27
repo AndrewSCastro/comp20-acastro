@@ -1,7 +1,6 @@
 # comp20-acastro
 COMP 20 Spring 2018 Private Repo for Andrew Castro
 
-WILL FINISH SOON
 
 What is this purpose of this Git repository?
 
