@@ -3,9 +3,9 @@ COMP 20 Spring 2018 Private Repo for Andrew Castro
 
 WILL FINISH SOON
 
-What is this purpose of this Git repository?
+What is this purpose of this Git repository?:
 The purpose of this Git repository is to showcase my work for the semester
-in Tufts' Comp20 Web Programming course. It shows a place for all my projects including:
+in Tufts' Comp20 Web Programming course. It shows a place for all my projects including
 -
 - 
 - 
@@ -13,7 +13,8 @@ in Tufts' Comp20 Web Programming course. It shows a place for all my projects in
 -
 
 
-What was your favorite lab or assignment and why?
+What was your favorite lab or assignment and why?: 
+
 My favorite assignment was the client side of the NotUber app. I felt it solidied
 my understanding of JSON objects and Javascript functions. It was also the first 
 time in the course I learned how to do use an API, the Google Maps API, which
