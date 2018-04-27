@@ -5,7 +5,9 @@ COMP 20 Spring 2018 Private Repo for Andrew Castro
 What is this purpose of this Git repository?
 
 The purpose of this Git repository is to showcase my work for the semester
-in Tufts' Comp20 Web Programming course. It shows a place for all my projects including:
+in Tufts' Comp20 Web Programming course. It serves as a tangible and accessible 
+place that displays my mini portfolio and progress in Web Programming.
+It also is the go-to place where It shows a place for all my projects including:
 A responsive website that uses image spriting to change website display based on window size
 A responsive website that displays song lyrics to 'Never Gonna Give You Up', using Javascript and the DOM Model
 A messaging website that receives user input, stores in local storage, and displays all messages, using JQuery
