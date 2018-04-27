@@ -5,12 +5,8 @@ WILL FINISH SOON
 
 What is this purpose of this Git repository?
 The purpose of this Git repository is to showcase my work for the semester
-in Tufts' Comp20 Web Programming course. It shows a place for all my projects including
--
-- 
-- 
-- 
--
+in Tufts' Comp20 Web Programming course. It shows a place for all my projects including:
+
 
 What was your favorite lab or assignment and why?: 
 
@@ -21,10 +17,14 @@ I thought was pretty cool.
 
 How much do you think you have grown from day 1 of this course to now?
 I think my mind, and my CS mind specifically, has been opened up by this class immensely. 
-I think the small misconception I had 
+I think the small misconception I had about this course was that there was a lot more
+of a client focus, as I thought I'd learn to create gorgeous websites and be a master
+designer. But this class isn't called web design, it's web programming and I'm glad I was
+learn about the 'back end' and security side of the web as well. 
 
 What was the most important thing that you learned in this course? Cite two examples as evidence.
 For me, the most important thing I learned was that there are so many frameworks and ways 
-to do so many aspects of this course, that
+to do so many aspects of this course, that it's impossible to do things alone, and you have to be 
+ok with it. 
 
 Now that you have finished the course, what topic would you like to delve deeper into?
