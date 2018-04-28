@@ -26,10 +26,11 @@ The server interacts with a MongoDB database and receives requests from the clie
 
 
 
-<h4> 3. Abstract of Findings
-1) I started with sending malicious inputs into the server as a client. For example, instead of saying my name is JANET, I said my name is "< html > HACKED < /html >".  I then looked at the source code from the client, where I saw vulnerabilites that could be exploited by using curl command (which is a tool used to send data to the server, which the server then stores in a database)
-2) I then looked for the general server permissions of allowing other sources to access the server. The user had CORS enabled for everyone, meaning anyone could access the server's information.
-3) Finally, I looked at coding practices that would protect from these bugs in the first place. It is a good idea for a server to make sure that input is as normal as possible. Meaning it doesn't look like < html > tags or any links in it, if it's supposed to be an inputted number. There were vulnerabilities found in sanitizing input as well as making sure input is of the right format. In this case, my client did not check if numerical values are entered in for input, and would be a good idea to do so
+<h4> 3. Abstract of Findings </h4>
+<h4 > 1) I started with sending malicious inputs into the server as a client. For example, instead of saying my name is JANET, I said my name is "< html > HACKED < /html >".  I then looked at the source code from the client, where I saw vulnerabilites that could be exploited by using curl command (which is a tool used to send data to the server, which the server then stores in a database) </h4>
+<h4> 2) I then looked for the general server permissions of allowing other sources to access the server. The user had CORS enabled for everyone, meaning anyone could access the server's information. </h4>
+<h4> 3) I looked at coding practices that would protect from these bugs in the first place. It is a good idea for a server to make sure that input is as normal as possible. Meaning it doesn't look like < html > tags or any links in it, if it's supposed to be an inputted number. There were vulnerabilities found in sanitizing input as well as making sure input is of the right format. In this case, my client did not check if numerical values are entered in for input, and would be a good idea to do so </h4>
+<h4> 4. Finally, I thought about privacy, and realized that having hardcoded list of all vehicle ID's was not the best idea for this rideshare app. </h4>
 
 </h4>
 
@@ -46,7 +47,7 @@ The server interacts with a MongoDB database and receives requests from the clie
 <h1> <img src = "ALERT.jpg" alt= "ALERT used">  </h1>
 
 
-<h4> Issue: database injection. The program did not check or sanitize input before it is placed in the database. </h4>
+<h4> Issue: XSS / HTML injection into database. The program did not check or sanitize input before it is placed in the database. </h4>
 <h4> Location: takes place on /rides post request when a client sends data to the server </h4>
 <h4> Severity: High issue because any data curled in the correct format will be stored in the database, and that
 database information is shared and used a lot by the rest of the server's paths. For example, vehicle.json
@@ -90,8 +91,8 @@ More importantly, my client should send in the CORS header, Access-Control-Allow
 <h1> ISSUE NUM 3 </h1>
 <img src = "NumericalProblem.jpg" alt= "numerical problem"> 
 <p1> 
-<h4> C) Issue: Checking for valid input. Bad programming practice because will put NaN values into database
-Location: post ./rides  </h4>
+<h4> C) Issue: Checking for valid input. Bad programming practice because will put NaN values into database </h4>
+<h4> Location: post ./rides  </h4>
 <h4> Severity: Low because it will not break server in terms of what the client is concerned, however, it will reveal
 something faulty about the inputted input or potentially malicious attacks from an attacker </h4>
 <h4> Description: I found the issue by curling non numerical values into lattitude and longitude. I believe this is an error because it is only helpful that the server checks for invalid input.  </h4>
@@ -103,6 +104,26 @@ Add to the server code a checker for Nan, this way, it checks if any non numeric
 <h5>    return NaN; </h5>
  <h5>  } </h5>
 </p2>
+
+
+
+
+<br> <br>
+<h1> ISSUE NUM 4 </h1>
+<img src = "vehicle_array.jpg" alt= "vehicle problem"> 
+<h4> D) Issue: Client has access to array of vehicles. Bad programming practice for privacy of drivers
+	and for those who can access driver capabilities. </h4>
+<h4>	Location:  in /rides vehicles array </h4>
+<h4> Severity: Medium Because it will allow any person with the source code to be able to see the list of the drivers and be able to simulate and act as a driver because they know all the driver ID's. If this is going to be a functional rideshare app, you don't want just ANYONE to be able to submit their coordinates as a driver </h4>
+<h4>
+Description: I found the issue after curling and testing a bunch of inputs, and realized that having a hard coded in array of all the keys was not the best idea </h4>
+<h4> Resolution: put vehicle definition elsewhere, either getting from a different server with different access privacy, or from an external javascript file
+	For example, on stack overflow it says you can put in an external file such as:
+	"< script type="text/javascript" src="http://mydomain.com/xxxx.js"></ script>"
+	So that the javascript code won't be immediately visable to user.
+After that I suggest trying to further 'obfuscate the file' to hinder the attacker to find the info about vehicles and their id's </h4>
+
+
 </p1>
 
 <br> <br> <br> <br>
@@ -122,7 +143,8 @@ header-do?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_
 <a href ="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"> CORS Mozilla </a>
 <br> 
 <a href = "https://tuftsdev.github.io/WebProgramming/notes/web_security.html"> Security notes </a>
-
+<br> 
+<a href = "https://stackoverflow.com/questions/6869312/how-do-i-hide-javascript-code-in-a-webpage?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa"> HIDE SOURCE CODE </a>
 
 
 
