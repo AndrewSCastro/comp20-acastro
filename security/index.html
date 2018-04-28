@@ -22,16 +22,14 @@ html {background-color: grey};
 the application given to me by Matthew Manfre. It is a server for an Uber-like ride sharing service which has a few different GET/POST pathways.
 The server interacts with a MongoDB database and receives requests from the client and also sends back response to the interface. </h4>
 
-<h4> 2. Methodology - I first started with testing where I did not have to look at the code of the website. </h4>
+<h4> 2. Methodology - I first started with testing where I did not have to look at the code of the website. Just looking if the website displayed anything peculiar with any edge cases or weird inputs.Then, as I wanted to find even more specific vulernabilities I tried using the tool curl to send normal data and malicious data to the server. Lastly, I looked at the code, and exploited my knowledge of the code's implementation to check how there were bad coding practices of vulernabilities </h4>
 
 
 
-<h4> 3. Bypassing Restrictions on Input Choices 
-I started with sending malicious inputs into the server as a client. For example, instead of saying my name is JANET, I said my name is "< html > HACKED < /html >". 
-I then looked at the source code from the client, where I saw vulnerabilites that could be exploited
-by using curl command (which is a tool used to send data to the server, which the server then stores in a database)
-I then looked for the general server permissions of allowing other sources to access the server. The user had CORS enabled for everyone, meaning anyone could access the server's information.
-Finally, I looked at coding practices that would protect from these bugs in the first place. It is a good idea for a server to make sure that input is as normal as possible. Meaning it doesn't look like < html > tags or any links in it, if it's supposed to be an inputted number. There were vulnerabilities found in sanitizing input as well as making sure input is of the right format. 
+<h4> 3. Abstract of Findings
+1) I started with sending malicious inputs into the server as a client. For example, instead of saying my name is JANET, I said my name is "< html > HACKED < /html >".  I then looked at the source code from the client, where I saw vulnerabilites that could be exploited by using curl command (which is a tool used to send data to the server, which the server then stores in a database)
+2) I then looked for the general server permissions of allowing other sources to access the server. The user had CORS enabled for everyone, meaning anyone could access the server's information.
+3) Finally, I looked at coding practices that would protect from these bugs in the first place. It is a good idea for a server to make sure that input is as normal as possible. Meaning it doesn't look like < html > tags or any links in it, if it's supposed to be an inputted number. There were vulnerabilities found in sanitizing input as well as making sure input is of the right format. In this case, my client did not check if numerical values are entered in for input, and would be a good idea to do so
 
 </h4>
 
@@ -41,7 +39,7 @@ Finally, I looked at coding practices that would protect from these bugs in the 
 <br> <br><br> <br>
 <h4> 4. Issues Found </h4>
 
-<h1> ISSUE 1 </h1>
+<h1> ISSUE 1 - IN /rides</h1>
 <h1> <img src = "DBinsert.jpg" alt= "DB issue screenshot"> </h1>
 <h1> <img src = "DBcurl.jpg" alt= "Curl command used">  </h1>
 
@@ -61,6 +59,7 @@ injectionable HTMLs </h4>
 <h5> user = user.replace(/[^\w\s]/gi, ''); </h5>
  <h5> latitude = latitude.replace(/[^\w\s]/gi, ''); </h5>
 <h5> longitude = longitude.replace(/[^\w\s]/gi, ''); </h5>
+
 
 
 <br> <br>
@@ -83,6 +82,7 @@ More importantly, my client should send in the CORS header, Access-Control-Allow
 </h4>
 </p1>
 
+
 <br> <br>
 <h1> ISSUE NUM 3 </h1>
 <img src = "NumericalProblem.jpg" alt= "numerical problem"> 
@@ -95,7 +95,7 @@ something faulty about the inputted input or potentially malicious attacks from 
 <h4> Proof of vulnerability: ^^ see above screenshot </h4>
 
 <p2> Resolution: 
-Add to the server code a checker for Nan, this way, it checks if any non numerical values were put in and does not put it into the server's database and the server does not try to access it later.
+Add to the server code a checker for Nan, this way, it checks if any non numerical values were put in and does not put it into the server's database and so that the server does not try to access it later.
 <h5> if (isNaN(x)) { </h5>
 <h5>    return NaN; </h5>
  <h5>  } </h5>
@@ -105,7 +105,8 @@ Add to the server code a checker for Nan, this way, it checks if any non numeric
 <br> <br> <br> <br>
 
 <h2> Conclusion </h2>
-<h3> Future considerations would be to not do uneccessary checking that your code does not have to do. For example, in vehicle.json, the only specification is that it searches for vehicles. If the user is not giving a vehicle in the query string, you don't even have to search the passengers array (which you do). <bold> Unnecessary accesses to the database opens you up for more attacks </bold> </h3>
+<h3> Future considerations: make sure to sanitize all input for 'script' elements and html tags. That way, the user cannot input malicious input so easily. 
+Also another idea  would be to not do uneccessary checking that your code does not have to do. For example, in vehicle.json, the only specification is that it searches for vehicles. If the user is not giving a vehicle in the query string, you don't even have to search the passengers array (which you do). <bold> Unnecessary accesses to the database opens you up for more attacks </bold> </h3>
 
 
 <h2 > References used for this work </h2>
