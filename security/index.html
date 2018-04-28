@@ -7,21 +7,120 @@
 	<link rel = "stylesheet" type= "text/css" href= "bio.css">
 	<link href= 'https://fonts.googleapis.com/css?family=Oswald' rel = 'stylesheet'>
     <title>Security</title>
+    <style> 
+html {background-color: grey};
+
+</style>
 </head>
 
 
 <body>
 	<h1> Andrew Castro's Hack of Matt Manfre's code </h1>
-	<img src = "LittleIndia.jpg" alt= "LittleIndia Colorful House"> 
-<p>
-1. Introduction - I was hired to solve the security and privacy issues in 
-the application given to me by Matthew Manfre. It is a server for an Uber-like ride sharing service which has a few different GET/POST pathways.
-The server interacts with a MongoDB database and receives requests from the client and also sends back response to the interface.
 
-2. Methodology - I first started with black box texting where I found the first vulerability. I sent the data to the surver in html, where it was then 
-stored in the dat
-<p>	
-</body>
+<p>
+<h4> 1. Introduction - I was hired to solve the security and privacy issues in 
+the application given to me by Matthew Manfre. It is a server for an Uber-like ride sharing service which has a few different GET/POST pathways.
+The server interacts with a MongoDB database and receives requests from the client and also sends back response to the interface. </h4>
+
+<h4> 2. Methodology - I first started with testing where I did not have to look at the code of the website. </h4>
+
+
+
+<h4> 3. Bypassing Restrictions on Input Choices 
+I started with sending malicious inputs into the server as a client. For example, instead of saying my name is JANET, I said my name is "< html > HACKED < /html >". 
+I then looked at the source code from the client, where I saw vulnerabilites that could be exploited
+by using curl command (which is a tool used to send data to the server, which the server then stores in a database)
+I then looked for the general server permissions of allowing other sources to access the server. The user had CORS enabled for everyone, meaning anyone could access the server's information.
+Finally, I looked at coding practices that would protect from these bugs in the first place. It is a good idea for a server to make sure that input is as normal as possible. Meaning it doesn't look like < html > tags or any links in it, if it's supposed to be an inputted number. There were vulnerabilities found in sanitizing input as well as making sure input is of the right format. 
+
+</h4>
+
+
+
+
+<br> <br><br> <br>
+<h4> 4. Issues Found </h4>
+
+<h1> ISSUE 1 </h1>
+<h1> <img src = "DBinsert.jpg" alt= "DB issue screenshot"> </h1>
+<h1> <img src = "DBcurl.jpg" alt= "Curl command used">  </h1>
+
+<h4> Issue: database injection. The program did not check or sanitize input before it is placed in the database. </h4>
+<h4> Location: takes place on /rides post request when a client sends data to the server </h4>
+<h4> Severity: High issue because any data curled in the correct format will be stored in the database, and that
+database information is shared and used a lot by the rest of the server's paths. For example, vehicle.json
+will then search that database and print to the user the fields in the object </h4>
+<h4> Description of issue: I found it by 'black box' testing, meaning that I didn't look at my client's code to find the vulerability. </h4>
+<h4> Proof of vulnerability: see above ^^^ </h4>
+<h4> Resolution: Add to the following code by sanitizing input to get rid of special characters that allow
+injectionable HTMLs </h4>
+
+<h5> var user = request.body.username; </h5>
+<h5> var latitude = request.body.lat; </h5>
+<h5>  var longitude = request.body.lng; </h5>
+<h5> user = user.replace(/[^\w\s]/gi, ''); </h5>
+ <h5> latitude = latitude.replace(/[^\w\s]/gi, ''); </h5>
+<h5> longitude = longitude.replace(/[^\w\s]/gi, ''); </h5>
+
+
+<br> <br>
+<p1>
+<h1> ISSUE NUM 2 </h1>
+<img src = "CORSissues.jpg" alt= "Cors issues screenshot"> 
+<h4> B) Issue: Cross-site request forgery. bad programming practice with allowing access to any source. </h4>
+<h4> Location: Takes place across the entire server and its associatied paths </h4>
+<h4> Severity: Medium because of a clear lack of server authenticiation is dangerous for any web application. Due to the above lines of allowing any origin to access the resource, the CORS initialization here is dangerous because
+everyone now has access to the server's functionality. This is particularly bad because regardless of the identity
+of the attacker or what IP or even server they have, they have access. 
+Per developer.moizlla.org "The origin parameter specifies a URI that may access the resource. The browser must enforce this. For requests without credentials, the server may specify "*" as a wildcard, thereby allowing any origin to access the resource." This is a medium sized problem because while it is useful that it allows 
+several different sources to access the response from the server, it is also bad / insecure for that reason
+</h4>
+<h4> Description: I found the issue by inspecting my partners code (white box testing). I saw the '*' for 
+Access-Control-Allow-Origin and knew that was giving access to a lot of sources. </h4>
+<h4> Proof of vulnerability: ^^ see above screenshot </h4>
+<h4> Resolution: Add to the client code a section with XMLHttpRequest withCredentials to true.
+More importantly, my client should send in the CORS header, Access-Control-Allow-Credentials and setting that header to true. 
+</h4>
+</p1>
+
+<br> <br>
+<h1> ISSUE NUM 3 </h1>
+<img src = "NumericalProblem.jpg" alt= "numerical problem"> 
+<p1> 
+<h4> C) Issue: Checking for valid input. Bad programming practice because will put NaN values into database
+Location: post ./rides  </h4>
+<h4> Severity: Low because it will not break server in terms of what the client is concerned, however, it will reveal
+something faulty about the inputted input or potentially malicious attacks from an attacker </h4>
+<h4> Description: I found the issue by curling non numerical values into lattitude and longitude. I believe this is an error because it is only helpful that the server checks for invalid input.  </h4>
+<h4> Proof of vulnerability: ^^ see above screenshot </h4>
+
+<p2> Resolution: 
+Add to the server code a checker for Nan, this way, it checks if any non numerical values were put in and does not put it into the server's database and the server does not try to access it later.
+<h5> if (isNaN(x)) { </h5>
+<h5>    return NaN; </h5>
+ <h5>  } </h5>
+</p2>
+</p1>
+
+<br> <br> <br> <br>
+
+<h2> Conclusion </h2>
+<h3> Future considerations would be to not do uneccessary checking that your code does not have to do. For example, in vehicle.json, the only specification is that it searches for vehicles. If the user is not giving a vehicle in the query string, you don't even have to search the passengers array (which you do). <bold> Unnecessary accesses to the database opens you up for more attacks </bold> </h3>
+
+
+<h2 > References used for this work </h2>
+
+<a href="https://www.youtube.com/watch?v=lcO1BTNh8r8"> MING's DEF CON 21 Talk </a>
+<br> 
+<a href="https://stackoverflow.com/questions/24687313/what-exactly-does-the-access-control-allow-credentials-
+header-do?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa"> CORS StackOverflow </a>
+<br> 
+<a href ="https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS"> CORS Mozilla </a>
+<br> 
+<a href = "https://tuftsdev.github.io/WebProgramming/notes/web_security.html"> Security notes </a>
+
+
+
 
 
 
